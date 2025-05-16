@@ -20,140 +20,93 @@
         <router-link class="switch-link" to="/register">Nog geen account? Registreren</router-link>
       </form>
     </div>
-  </div>
-</template>
-
-<script>
-export default {
-  name: 'Login',
-  data() {
-    return {
-      email: '',
-      password: '',
-      rememberMe: false,
-    };
-  },
-  methods: {
-    async handleLogin() {
-      try {
-        const response = await fetch('http://localhost:3000/api/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: this.email,
-            password: this.password,
-            rememberMe: this.rememberMe,
-          }),
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
-          alert('Login succesvol!');
-          this.$router.push('/dashboard');
-        } else {
-          alert(result.message || 'Login mislukt');
-        }
-      } catch (err) {
-        alert('Fout bij verbinden met server');
-        console.error(err);
-      }
+  </template>
+  
+  <script>
+  export default {
+    name: 'Login',
+    data() {
+      return {
+        email: '',
+        password: '',
+      };
     },
-  },
-};
-</script>
-
-<style scoped>
-.auth-page {
-  background: linear-gradient(to bottom right, #eef2ff, #c3dafe);
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.auth-container {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 1.5rem;
-  width: 400px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-}
-
-.form-title {
-  text-align: center;
-  margin-bottom: 1.5rem;
-  font-size: 1.5rem;
-  color: #333;
-}
-
-label {
-  margin-bottom: 0.5rem;
-  font-weight: bold;
-  color: #555;
-  display: block;
-}
-
-input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 0.75rem;
-  font-size: 1rem;
-  margin-bottom: 1rem;
-  transition: border 0.3s;
-}
-
-input:focus {
-  border-color: #667eea;
-  outline: none;
-}
-
-button {
-  width: 100%;
-  padding: 0.75rem;
-  background-color: #667eea;
-  color: white;
-  border: none;
-  border-radius: 0.75rem;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-top: 1rem;
-}
-
-button:hover {
-  background-color: #5a67d8;
-}
-
-.remember-me {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.remember-me input {
-  margin-right: 0.5rem;
-}
-
-.switch-link,
-.forgot-password-link {
-  display: block;
-  text-align: center;
-  margin-top: 1rem;
-  color: #667eea;
-  text-decoration: none;
-}
-
-.switch-link:hover,
-.forgot-password-link:hover {
-  text-decoration: underline;
-}
-</style>
+    methods: {
+      async handleLogin() {
+        try {
+          const response = await fetch('http://localhost:3000/api/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: this.email,
+              password: this.password,
+            }),
+          });
+  
+          const result = await response.json();
+  
+          if (response.ok) {
+            alert('Login succesvol!');
+            this.$router.push('/'); // navigeer naar home of dashboard
+          } else {
+            alert(result.message || 'Login mislukt');
+          }
+        } catch (err) {
+          alert('Fout bij verbinden met server');
+          console.error(err);
+        }
+      },
+    },
+  };
+  </script>
+  
+  <style scoped>
+  .login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  </style>
+  
