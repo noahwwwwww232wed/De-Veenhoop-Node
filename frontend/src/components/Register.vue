@@ -17,6 +17,8 @@
 
         <label for="password">Wachtwoord</label>
         <input v-model="password" type="password" id="password" placeholder="Wachtwoord" required />
+        <label for="password">Wachtwoord Bevestigen</label>
+        <input v-model="password" type="password" id="password" placeholder="Wachtwoord" required />
 
         <div class="remember-me">
           <label class="remember-label">
@@ -90,6 +92,7 @@ export default {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  
 }
 
 
@@ -99,10 +102,13 @@ export default {
   border-radius: 1.5rem;
   width: 100%;
   max-width: 500px;
+  max-height: 90vh; /* Maximaal 90% van het scherm */
+  overflow-y: auto; /* Scroll als het formulier te hoog is */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
 }
+
 
 .form-title {
   text-align: center;

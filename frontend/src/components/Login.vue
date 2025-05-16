@@ -52,7 +52,7 @@ export default {
 
         if (response.ok) {
           alert('Login succesvol!');
-          this.$router.push('/');
+          this.$router.push('/dashboard');
         } else {
           alert(result.message || 'Login mislukt');
         }

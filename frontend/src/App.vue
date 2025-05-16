@@ -1,31 +1,21 @@
 <template>
-  <div id="app">
-    
-
-    
-    <!-- Hier worden de pagina-componenten geladen -->
-    <router-view />
-  </div>
+  <router-view />
 </template>
 
-<script>
-export default {
-  name: 'App',
-};
-</script>
-
 <style>
-nav {
-  margin-bottom: 20px;
-}
-
-router-link {
-  margin-right: 10px;
-}
 html, body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to bottom right, #eef2ff, #c3dafe);
+  font-family: sans-serif;
 }
 
+#app {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
 </style>
