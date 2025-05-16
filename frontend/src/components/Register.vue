@@ -17,8 +17,9 @@
 
         <label for="password">Wachtwoord</label>
         <input v-model="password" type="password" id="password" placeholder="Wachtwoord" required />
-        <label for="password">Wachtwoord Bevestigen</label>
-        <input v-model="password" type="password" id="password" placeholder="Wachtwoord" required />
+
+        <label for="WWbevestigen">Wachtwoord Bevestigen</label>
+        <input v-model="confirmPassword" type="password" id="WWbevestigen" placeholder="Wachtwoord bevestigen" required />
 
         <div class="remember-me">
           <label class="remember-label">
@@ -44,12 +45,18 @@ export default {
       achternaam: '',
       email: '',
       password: '',
+      confirmPassword: '', // Toegevoegd
       rememberMe: false,
       message: ''
     };
   },
   methods: {
     async handleRegister() {
+      if (this.password !== this.confirmPassword) {
+        this.message = 'Wachtwoorden komen niet overeen.';
+        return;
+      }
+
       try {
         const response = await fetch('http://localhost:3000/api/register', {
           method: 'POST',
