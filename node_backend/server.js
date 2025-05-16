@@ -6,6 +6,8 @@ const port = 3000;
 const cors=require('cors');
 
 
+
+
 // Importeer de getAdmins functie uit je routes-bestand
 const { register } = require('./routes/registerRoutes');
 const { home } = require('./routes/userRoutes');
