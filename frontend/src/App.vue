@@ -22,4 +22,10 @@ nav {
 router-link {
   margin-right: 10px;
 }
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
 </style>

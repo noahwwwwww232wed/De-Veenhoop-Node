@@ -4,6 +4,8 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+
+
 // Importeer de getAdmins functie uit je routes-bestand
 const { register } = require('./routes/adminRoutes');
 const { home } = require('./routes/userRoutes');
