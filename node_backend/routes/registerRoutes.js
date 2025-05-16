@@ -42,7 +42,7 @@ async function register(req, res) {
 
 
 
-    const [rows, fields] = await connection.execute('INSERT INTO users (id, name, email, password) VALUES (?, ?, ?, ?)', [0, req.body.name, req.body.email, req.body.password]);
+    const [rows, fields] = await connection.execute('INSERT INTO users (id, name, email, password) VALUES (?, ?, ?, ?)', [0, req.body.naam, req.body.email, req.body.password]);
     console.log('Data is opgeslagen in de database:', rows);
 
     await connection.end();

@@ -58,7 +58,7 @@ export default {
       }
 
       try {
-        const response = await fetch('http://localhost:3000/api/register', {
+        const response = await fetch(import.meta.env.VITE_API_URL + '/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -75,6 +75,7 @@ export default {
         const data = await response.json();
         if (response.ok) {
           this.message = 'Registratie gelukt!';
+          this.$router.push('/login'); // Ga naar de login pagina na succesvol registratie
         } else {
           this.message = data.message;
         }

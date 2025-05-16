@@ -38,7 +38,7 @@ export default {
   methods: {
     async handleLogin() {
       try {
-        const response = await fetch('http://localhost:3000/api/login', {
+        const response = await fetch(import.meta.env.VITE_API_URL + '/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -52,9 +52,9 @@ export default {
         const result = await response.json();
 
         if (response.ok) {
-          alert('Login succesvol!');
-          this.$router.push('/');
+          this.$router.push('/dashboard');
         } else {
+          //to do
           alert(result.message || 'Login mislukt');
         }
       } catch (err) {
