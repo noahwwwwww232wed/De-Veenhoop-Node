@@ -8,10 +8,10 @@ async function register(req, res) {
 
   try {
     const connection = await mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
       password: '',
-      database: 'deveenhoop'
+      database: process.env.DB_NAME,
     });
 
     console.log('Verbonden met de database!');
@@ -42,7 +42,7 @@ async function register(req, res) {
 
 
 
-    const [rows, fields] = await connection.execute('INSERT INTO users (id, name, email, password) VALUES (?, ?, ?, ?)', [0, req.body.name, req.body.email, req.body.password]);
+    const [rows, fields] = await connection.execute('INSERT INTO users (id, name, email, password) VALUES (?, ?, ?, ?)', [0, req.body.naam, req.body.email, req.body.password]);
     console.log('Data is opgeslagen in de database:', rows);
 
     await connection.end();
