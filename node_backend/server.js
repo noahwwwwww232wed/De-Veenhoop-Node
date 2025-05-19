@@ -10,6 +10,7 @@ const cors=require('cors');
 
 // Importeer de getAdmins functie uit je routes-bestand
 const { register } = require('./routes/registerRoutes');
+const { login } = require('./routes/loginRoutes');
 const { home } = require('./routes/userRoutes');
 
 const options = {
@@ -23,6 +24,7 @@ app.get('/', home);
 // Route voor /admin
 // app.get('/admin', getAdmins);
 app.post('/register', register);
+app.post('/login', login);
 
 // Start de server
 app.listen(port, () => {
