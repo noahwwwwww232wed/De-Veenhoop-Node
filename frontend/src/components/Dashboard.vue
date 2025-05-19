@@ -1,112 +1,115 @@
 <template>
-  <div class="home-page">
-    <!-- Navbar bovenaan -->
+  <div class="dashboard-page">
     <nav class="navbar">
       <div class="navbar-left">
-        <img src="https://static.edutorial.nl/projecten/veenhoop/logo_veenhoop.jpg" alt="Logo" class="logo" />
+        <img
+          src="https://static.edutorial.nl/projecten/veenhoop/logo_veenhoop.jpg"
+          alt="Logo"
+          class="logo"
+        />
       </div>
-      <div class="navbar-links">
-        <a href="/">Home</a>
-        <a href="/about">About</a>        
+
+      <div class="navbar-center">
+        <router-link to="/" class="nav-link">Home</router-link>
+        <router-link to="/about" class="nav-link">About</router-link>
+      </div>
+
+      <div class="navbar-right">
+        <button @click="handleLogout" class="logout-button">Logout</button>
       </div>
     </nav>
 
-    <!-- Content links uitgelijnd -->
-    
+    <!-- Jouw dashboard content -->
+    <div class="dashboard-content">
+     
+      <!-- meer dashboard content hier -->
     </div>
-
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'Home',
+  name: "Dashboard",
+  methods: {
+    handleLogout() {
+      localStorage.removeItem("authToken");
+      this.$router.push("/");
+    },
+  },
 };
 </script>
 
 <style scoped>
-.home-page {
-  flex: 1;
+.dashboard-page {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  min-height: 100vh;
 }
 
-/* Navbar */
+/* Navbar styling */
 .navbar {
-  width: 100%;
-  height: 70px;
-  background-color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background-color: white;
   padding: 0 2rem;
+  height: 70px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   z-index: 10;
 }
 
-.logo {
+/* Linkerkant logo */
+.navbar-left .logo {
   height: 40px;
 }
 
-.navbar-links a {
-  margin-left: 1.5rem;
-  text-decoration: none;
+/* Midden: Home en About gecentreerd */
+.navbar-center {
+  display: flex;
+  gap: 2rem;
+  flex: 1;
+  justify-content: center;
+}
+
+.navbar-center .nav-link {
   color: #667eea;
   font-weight: 600;
+  text-decoration: none;
+  font-size: 1rem;
   transition: color 0.3s;
 }
 
-.navbar-links a:hover {
+.navbar-center .nav-link:hover {
   color: #5a67d8;
+  text-decoration: underline;
 }
 
-/* Form links */
-.home-container {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 1.5rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
-  margin: 3rem 0 0 2rem; /* links uitgelijnd */
-  text-align: left;
-}
-
-.home-title {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: #333;
-}
-
-.home-text {
-  font-size: 1rem;
-  color: #555;
-  margin-bottom: 2rem;
-}
-
-.home-nav {
+/* Rechts: logout knop */
+.navbar-right {
   display: flex;
   align-items: center;
-  gap: 1rem;
 }
 
-.home-nav a {
-  text-decoration: none;
-  color: #667eea; /* Blauw */
-  font-weight: bold;
-  transition: color 0.3s;
+.logout-button {
+  background-color: #667eea;
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
 }
 
-.home-nav a:hover {
-  text-decoration: underline;
-  color: #5a67d8; /* Donkerder blauw bij hover */
+.logout-button:hover {
+  background-color: #5a67d8;
 }
 
-
-
-.divider {
-  color: #999;
+/* Dashboard content */
+.dashboard-content {
+  padding: 2rem;
+  flex-grow: 1;
 }
 </style>

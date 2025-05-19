@@ -52,9 +52,12 @@ export default {
         const result = await response.json();
 
         if (response.ok) {
+          // ✅ Token opslaan
+          localStorage.setItem('authToken', result.token);
+
+          // ⏩ Ga naar dashboard
           this.$router.push('/dashboard');
         } else {
-          //to do
           alert(result.message || 'Login mislukt');
         }
       } catch (err) {
@@ -166,6 +169,4 @@ button:hover {
 .switch-link:hover {
   text-decoration: underline;
 }
-
-
 </style>
