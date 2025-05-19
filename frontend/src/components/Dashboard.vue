@@ -1,62 +1,112 @@
 <template>
-  <div class="dashboard-page">
-    <div class="dashboard-container">
-      <h1 class="dashboard-title">Welkom op je dashboard!</h1>
-      <p class="dashboard-text">Je bent succesvol ingelogd.</p>
-      <router-link to="/" class="dashboard-link">Terug naar Home</router-link>
+  <div class="home-page">
+    <!-- Navbar bovenaan -->
+    <nav class="navbar">
+      <div class="navbar-left">
+        <img src="https://static.edutorial.nl/projecten/veenhoop/logo_veenhoop.jpg" alt="Logo" class="logo" />
+      </div>
+      <div class="navbar-links">
+        <a href="/">Home</a>
+        <a href="/about">About</a>        
+      </div>
+    </nav>
+
+    <!-- Content links uitgelijnd -->
+    
     </div>
-  </div>
+
 </template>
 
 <script>
 export default {
-  name: 'Dashboard',
+  name: 'Home',
 };
 </script>
 
 <style scoped>
-.dashboard-page {
-  background: linear-gradient(to bottom right, #eef2ff, #c3dafe);
-  min-height: 100vh;
+.home-page {
+  flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
+  flex-direction: column;
+  width: 100%;
 }
 
-.dashboard-container {
+/* Navbar */
+.navbar {
+  width: 100%;
+  height: 70px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  height: 40px;
+}
+
+.navbar-links a {
+  margin-left: 1.5rem;
+  text-decoration: none;
+  color: #667eea;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.navbar-links a:hover {
+  color: #5a67d8;
+}
+
+/* Form links */
+.home-container {
   background-color: white;
   padding: 2rem;
   border-radius: 1.5rem;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   width: 100%;
-  text-align: center;
+  max-width: 400px;
+  margin: 3rem 0 0 2rem; /* links uitgelijnd */
+  text-align: left;
 }
 
-.dashboard-title {
+.home-title {
   font-size: 2rem;
-  color: #333;
   margin-bottom: 1rem;
+  color: #333;
 }
 
-.dashboard-text {
-  font-size: 1.1rem;
+.home-text {
+  font-size: 1rem;
   color: #555;
   margin-bottom: 2rem;
 }
 
-.dashboard-link {
-  display: inline-block;
-  background-color: #667eea;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.75rem;
-  text-decoration: none;
-  transition: background-color 0.3s;
+.home-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-.dashboard-link:hover {
-  background-color: #5a67d8;
+.home-nav a {
+  text-decoration: none;
+  color: #667eea; /* Blauw */
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.home-nav a:hover {
+  text-decoration: underline;
+  color: #5a67d8; /* Donkerder blauw bij hover */
+}
+
+
+
+.divider {
+  color: #999;
 }
 </style>
