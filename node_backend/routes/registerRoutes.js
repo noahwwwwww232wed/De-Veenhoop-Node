@@ -14,27 +14,40 @@ async function register(req, res) {
     });
     console.log('Verbonden met de database!');
 
-    const userPassword = req.body.password;
+    const [rows, fields] = await connection.execute('SELECT * FROM users WHERE email = ?', [req.body.email]);
 
-    //Hasht het wachtwoord correct
-    const hashedPassword = await bcrypt.hash(userPassword, saltRounds);
+    if (rows.length > 0) {
+      return res.status(400).json({ message: 'E-mailadres is al in gebruik' });
 
-    //Gebruikt het gehashte wachtwoord in de query
-    const [rows] = await connection.execute(
-      'INSERT INTO users (id, name, email, password) VALUES (?, ?, ?, ?)',
-      [0, req.body.naam, req.body.email, hashedPassword]
-    );
+    } else {
 
-    console.log('Data is opgeslagen in de database:', rows);
 
-    await connection.end();
+      const userPassword = req.body.password;
 
-    return res.send(JSON.stringify("Data is opgeslagen in de database: " + rows));
+      //Hasht het wachtwoord correct
+      const hashedPassword = await bcrypt.hash(userPassword, saltRounds);
+
+      //Gebruikt het gehashte wachtwoord in de query
+      const [rows] = await connection.execute(
+        'INSERT INTO users (id, name, email, password) VALUES (?, ?, ?, ?)',
+        [0, req.body.naam, req.body.email, hashedPassword]
+      );
+
+
+
+
+      console.log('Data is opgeslagen in de database:', rows);
+
+      await connection.end();
+
+      return res.send(JSON.stringify("Data is opgeslagen in de database: " + rows));
+    }
   } catch (error) {
     const errorMessage = JSON.stringify('Database connectie is mislukt: ' + error);
     console.error(errorMessage);
     return res.status(500).send(errorMessage);
   }
 }
+
 
 module.exports = { register };

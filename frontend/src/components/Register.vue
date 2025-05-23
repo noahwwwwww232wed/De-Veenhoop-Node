@@ -51,40 +51,46 @@ export default {
     };
   },
   methods: {
-    async handleRegister() {
-      if (this.password !== this.confirmPassword) {
-        this.message = 'Wachtwoorden komen niet overeen.';
+  async handleRegister() {
+    if (this.password !== this.confirmPassword) { 
+      this.message = 'Wachtwoorden komen niet overeen.';
+      return;
+    }
+
+    try {
+      const response = await fetch(import.meta.env.VITE_API_URL + '/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          naam: this.naam,
+          tussenvoegsels: this.tussenvoegsels,
+          achternaam: this.achternaam,
+          email: this.email,
+          password: this.password
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.log(data);
+        // Fout van server tonen
+        this.message = data.message || 'Registratie mislukt.';
         return;
       }
 
-      try {
-        const response = await fetch(import.meta.env.VITE_API_URL + '/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            naam: this.naam,
-            tussenvoegsels: this.tussenvoegsels,
-            achternaam: this.achternaam,
-            email: this.email,
-            password: this.password
-          })
-        });
-
-        const data = await response.json();
-        if (response.ok) {
-          this.message = 'Registratie gelukt!';
-          this.$router.push('/login'); // Ga naar de login pagina na succesvol registratie
-        } else {
-          this.message = data.message;
-        }
-      } catch (error) {
-        console.error('Fout bij registratie:', error);
-        this.message = 'Netwerkfout';
-      }
+      // Succes
+      this.message = 'Registratie gelukt!';
+      this.$router.push('/login');
+      
+    } catch (error) {
+      console.error('Fout bij registratie:', error);
+      this.message = 'Netwerkfout. Probeer het later opnieuw.';
     }
   }
+}
 };
 </script>
 
