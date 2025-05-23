@@ -3,7 +3,6 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 async function register(req, res) {
-
   console.log('Probeer verbinding te maken met de database...');
 
   try {
@@ -16,42 +15,25 @@ async function register(req, res) {
 
     console.log('Verbonden met de database!');
 
-    let salt;
-    let hash;
-    bcrypt.genSalt(saltRounds, (err, salt) => {
-      if (err) {
-        console.error('Error generating salt:', err);
-        // Handle error
-        return;
-      }
+    const userPassword = req.body.password;
 
-      // Salt generation successful, proceed to hash the password
-      salt = salt;
-    });
+    //Hasht het wachtwoord correct
+    const hashedPassword = await bcrypt.hash(userPassword, saltRounds);
 
-    const userPassword = req.body.password; // Replace with the actual password
-    bcrypt.hash(userPassword, salt, (err, hash) => {
-      if (err) {
-        // Handle error
-        return;
-      }
+    //Gebruikt het gehashte wachtwoord in de query
+    const [rows] = await connection.execute(
+      'INSERT INTO users (id, name, email, password) VALUES (?, ?, ?, ?)',
+      [0, req.body.naam, req.body.email, hashedPassword]
+    );
 
-      // Hashing successful, 'hash' contains the hashed password
-      hash = hash;
-    });
-
-
-
-    const [rows, fields] = await connection.execute('INSERT INTO users (id, name, email, password) VALUES (?, ?, ?, ?)', [0, req.body.naam, req.body.email, req.body.password]);
     console.log('Data is opgeslagen in de database:', rows);
 
     await connection.end();
 
-
-    return res.send(JSON.stringify("data is opgeslagen in de database: " + rows));
+    return res.send(JSON.stringify("Data is opgeslagen in de database: " + rows));
   } catch (error) {
-    var errorMessage = JSON.stringify('Database connectie is mislukt:' + error);
-    console.error(errorMessage)
+    const errorMessage = JSON.stringify('Database connectie is mislukt: ' + error);
+    console.error(errorMessage);
     return res.status(500).send(errorMessage);
   }
 }
