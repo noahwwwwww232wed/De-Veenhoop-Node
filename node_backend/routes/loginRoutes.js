@@ -25,7 +25,6 @@ async function login(req, res) {
     await connection.end();
 
     bcrypt.compare(req.body.password, user.password, function (err, result) {
-      console.log(result);
       if (err) { throw (err); }
       else {
         return res.status(200).send(JSON.stringify('Inloggen is gelukt!'));
