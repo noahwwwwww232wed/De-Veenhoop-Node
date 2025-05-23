@@ -12,6 +12,7 @@ const cors=require('cors');
 const { register } = require('./routes/registerRoutes');
 const { login } = require('./routes/loginRoutes');
 const { home } = require('./routes/userRoutes');
+require('dotenv').config();
 
 const options = {
   origin: 'http://localhost:5173',
