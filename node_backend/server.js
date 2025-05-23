@@ -4,8 +4,6 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const cors=require('cors');
-require('dotenv').config();
-
 
 
 
@@ -16,7 +14,7 @@ const { login } = require('./routes/loginRoutes');
 const { home } = require('./routes/userRoutes');
 
 const options = {
-  origin: process.env.ORIGIN,
+  origin: 'http://localhost:5173',
 }
 
 app.use(cors(options));
