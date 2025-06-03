@@ -3,7 +3,6 @@
     <!-- Navbar component -->
     <Navbar @logout="handleLogout" />
 
-    <!-- Dashboard content -->
     <div class="dashboard-content">
      
     </div>

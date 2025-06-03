@@ -9,21 +9,36 @@
         <a href="/">Home</a>
         <a href="/about">About</a>
       </div>
-      <div class="navbar-right"></div> <!-- lege div om ruimte rechts te houden -->
     </nav>
 
-    <!-- Content -->
-    <div class="home-container">
-      <h2 class="home-title">De Veenhoop</h2>
-      <p class="home-text">
-        Welkom bij De Veenhoop. Je kunt inloggen of een nieuw account aanmaken.
-      </p>
+    <!-- Content blokken -->
+    <div class="home-content-row">
+      <!-- Login/Register blok -->
+      <div class="home-container">
+        <h2 class="home-title">De Veenhoop</h2>
+        <p class="home-text">
+          Welkom bij De Veenhoop. Je kunt inloggen of een nieuw account aanmaken.
+        </p>
 
-      <!-- Alleen tonen als niet ingelogd -->
-      <div class="home-nav" v-if="!isLoggedIn">
-        <router-link to="/login">Inloggen</router-link>
-        <span class="divider">|</span>
-        <router-link to="/register">Registreren</router-link>
+        <div class="home-nav" v-if="!isLoggedIn">
+          <router-link to="/login">Inloggen</router-link>
+          <span class="divider">|</span>
+          <router-link to="/register">Registreren</router-link>
+        </div>
+      </div>
+
+      <!-- Informatief blok met afbeelding -->
+      <div class="home-container info-block">
+        
+        <div>
+          <h2 class="home-title">Integraal platform voor persoonlijke talentontwikkeling</h2>
+          <p class="home-text">
+            Alles wat u nodig heeft om elke leerling goed uit te rusten voor de toekomst. 
+            Op één integraal platform dat al uw leer- en werkprocessen ondersteunt. 
+            Waar iedereen soepel samenwerkt. Natuurlijk passend binnen uw onderwijsvisie. 
+            En modulair van opzet, dus altijd klaar voor innovaties. Zo dynamisch is De Veenhoop.
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -47,10 +62,11 @@ export default {
 
 <style scoped>
 .home-page {
-  flex: 1;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  align-items: center;
+  background: linear-gradient(to bottom, #e8f0fe, #cde0fc);
+  min-height: 100vh;
 }
 
 /* Navbar */
@@ -58,30 +74,25 @@ export default {
   width: 100%;
   height: 70px;
   background-color: white;
-  display: flex;
-  align-items: center;
-  padding: 0 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   z-index: 10;
-  /* verdeel ruimte: logo links, links in midden, rechts lege ruimte */
-  justify-content: space-between;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
-.logo {
-  height: 40px;
-}
-
-/* Navbar flex zones */
 .navbar-left {
-  flex: 0 0 auto;
+  position: absolute;
+  left: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .navbar-center {
-  flex: 1 1 auto;
   display: flex;
-  justify-content: center;
   gap: 2rem;
 }
 
@@ -98,20 +109,27 @@ export default {
   text-decoration: underline;
 }
 
-.navbar-right {
-  flex: 0 0 100px; /* zorgt voor ruimte rechts, zodat midden echt in het midden staat */
+.logo {
+  height: 40px;
 }
 
-/* Content */
+/* Content row */
+.home-content-row {
+  display: flex;
+  gap: 2rem;
+  margin: 3rem auto;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Content blocks */
 .home-container {
   background-color: white;
   padding: 2rem;
   border-radius: 1.5rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
   width: 100%;
-  max-width: 400px;
-  margin: 3rem 0 0 2rem;
-  text-align: left;
 }
 
 .home-title {
@@ -146,5 +164,19 @@ export default {
 
 .divider {
   color: #999;
+}
+
+/* Info block met afbeelding */
+.info-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.info-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
 }
 </style>

@@ -3,6 +3,7 @@ import Home from '../components/Home.vue';
 import Login from '../components/Login.vue';
 import Register from '../components/Register.vue'; 
 import Dashboard from '../components/Dashboard.vue'; // <-- nieuw toegevoegd
+import About from '../components/About.vue';
 
 const routes = [
   {
@@ -28,6 +29,11 @@ const routes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
+    component: Dashboard, // <-- nieuw toegevoegd
+  },
+  {
+    path: '/about',
+    name: 'About',
     component: Dashboard, // <-- nieuw toegevoegd
   },
 ];
