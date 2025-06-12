@@ -9,12 +9,19 @@
     </div>
 
     <div class="navbar-center">
-      <router-link to="/" class="nav-link">Home</router-link>
+      <router-link :to="homeRoute" class="nav-link">Home</router-link>
+      <router-link v-if="isLoggedIn" to="/cijfers" class="nav-link">Cijfers</router-link>
       <router-link to="/about" class="nav-link">About</router-link>
     </div>
 
     <div class="navbar-right">
-      <button @click="$emit('logout')" class="logout-button">Logout</button>
+      <button
+        v-if="isLoggedIn"
+        @click="$emit('logout')"
+        class="logout-button"
+      >
+        Logout
+      </button>
     </div>
   </nav>
 </template>
@@ -22,8 +29,26 @@
 <script>
 export default {
   name: "Navbar",
+  props: {
+    isLoggedIn: {
+      type: Boolean,
+      default: false,
+    },
+    userRole: {
+      type: String,
+      default: null,
+    },
+  },
+  computed: {
+    homeRoute() {
+      if (this.userRole === 'docent') return '/docent-dashboard';
+      if (this.userRole === 'leerling') return '/leerling-dashboard';
+      return '/';
+    },
+  },
 };
 </script>
+
 
 <style scoped>
 .navbar {
@@ -39,15 +64,22 @@ export default {
   z-index: 10;
 }
 
+.navbar-left,
+.navbar-right {
+  width: 150px;
+  display: flex;
+  align-items: center;
+}
+
 .navbar-left .logo {
   height: 40px;
 }
 
 .navbar-center {
-  display: flex;
-  gap: 2rem;
   flex: 1;
+  display: flex;
   justify-content: center;
+  gap: 2rem;
 }
 
 .navbar-center .nav-link {
@@ -61,11 +93,6 @@ export default {
 .navbar-center .nav-link:hover {
   color: #5a67d8;
   text-decoration: underline;
-}
-
-.navbar-right {
-  display: flex;
-  align-items: center;
 }
 
 .logout-button {

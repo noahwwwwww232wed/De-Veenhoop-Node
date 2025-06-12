@@ -4,6 +4,10 @@ import Login from '../components/Login.vue';
 import Register from '../components/Register.vue'; 
 import Dashboard from '../components/Dashboard.vue'; // <-- nieuw toegevoegd
 import About from '../components/About.vue';
+import Cijfers from '../components/Cijfers.vue';
+import DocentDashboard from '../components/DocentDashboard.vue';
+import LeerlingDashboard from '../components/LeerlingDashboard.vue';
+
 
 const routes = [
   {
@@ -34,8 +38,23 @@ const routes = [
   {
     path: '/about',
     name: 'About',
-    component: Dashboard, // <-- nieuw toegevoegd
+    component: About, // <-- nieuw toegevoegd
   },
+  {
+    path: '/cijfers',
+    name: 'Cijfers',
+    component: Cijfers, // <-- nieuw toegevoegd
+  },
+  {
+  path: '/docent-dashboard',
+  name: 'DocentDashboard',
+  component: DocentDashboard,
+},
+{
+  path: '/leerling-dashboard',
+  name: 'LeerlingDashboard',
+  component: LeerlingDashboard,
+},
 ];
 
 const router = createRouter({

@@ -1,35 +1,38 @@
-
 // server.js
 const express = require('express');
+const cors = require('cors');
+require('dotenv').config();
+
 const app = express();
-const port = 3000;
-const cors=require('cors');
+const port = process.env.PORT || 3000;
 
-
-
-
-// Importeer de getAdmins functie uit je routes-bestand
+// Import routes
 const { register } = require('./routes/registerRoutes');
 const { login } = require('./routes/loginRoutes');
 const { home } = require('./routes/userRoutes');
-require('dotenv').config();
+const cijfersRoutes = require('./routes/cijfersRoutes');
 
-const options = {
-  origin: 'http://localhost:5173',
-}
+// CORS config
+const corsOptions = {
+  origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
+  credentials: true // als je cookies gebruikt later
+};
 
-app.use(cors(options));
+app.use(cors(corsOptions));
 app.use(express.json());
 
+// Routes
 app.get('/', home);
-// Route voor /admin
-// app.get('/admin', getAdmins);
 app.post('/register', register);
 app.post('/login', login);
+app.use('/api/cijfers', cijfersRoutes);
 
-// Start de server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+// 404 fallback
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route niet gevonden' });
 });
 
-
+// Start server
+app.listen(port, () => {
+  console.log(`✅ Server draait op http://localhost:${port}`);
+});

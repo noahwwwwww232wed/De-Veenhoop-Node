@@ -9,6 +9,13 @@
         <label for="password">Wachtwoord</label>
         <input v-model="password" type="password" id="password" placeholder="Wachtwoord" required />
 
+        <label for="role">Login als:</label>
+        <select v-model="role" id="role" required>
+          <option disabled value="">Kies een rol</option>
+          <option value="leerling">Leerling</option>
+          <option value="docent">Docent</option>
+        </select>
+
         <div class="remember-me">
           <label class="remember-label">
             <input type="checkbox" id="remember" v-model="rememberMe" />
@@ -25,8 +32,6 @@
   </div>
 </template>
 
-
-
 <script>
 export default {
   name: 'Login',
@@ -34,6 +39,7 @@ export default {
     return {
       email: '',
       password: '',
+      role: '',
       rememberMe: false
     };
   },
@@ -48,6 +54,7 @@ export default {
           body: JSON.stringify({
             email: this.email,
             password: this.password,
+            role: this.role,
           }),
         });
 
@@ -57,8 +64,14 @@ export default {
           // ✅ Token opslaan
           localStorage.setItem('authToken', result.token);
 
-          // ⏩ Ga naar dashboard
-          this.$router.push('/dashboard');
+          // ✅ Gebruiker redirecten op basis van rol
+          const userRole = result.role;
+
+          if (userRole === 'docent') {
+            this.$router.push('/docent-dashboard');
+          } else if (userRole === 'leerling') {
+            this.$router.push('/leerling-dashboard');
+          }
         } else {
           alert(result.message || 'Login mislukt');
         }
@@ -70,6 +83,9 @@ export default {
   },
 };
 </script>
+
+
+
 
 <style scoped>
 .auth-page {
@@ -112,7 +128,8 @@ label {
   display: block;
 }
 
-input {
+input,
+select {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #ccc;
@@ -122,7 +139,8 @@ input {
   transition: border 0.3s;
 }
 
-input:focus {
+input:focus,
+select:focus {
   border-color: #667eea;
   outline: none;
 }

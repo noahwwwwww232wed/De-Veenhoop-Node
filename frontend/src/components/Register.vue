@@ -21,6 +21,13 @@
         <label for="WWbevestigen">Wachtwoord Bevestigen</label>
         <input v-model="confirmPassword" type="password" id="WWbevestigen" placeholder="Wachtwoord bevestigen" required />
 
+        <label for="role">Registreer als:</label>
+        <select v-model="role" id="role" required>
+          <option disabled value="">Kies een rol</option>
+          <option value="leerling">Leerling</option>
+          <option value="docent">Docent</option>
+        </select>
+
         <div class="remember-me">
           <label class="remember-label">
             <input type="checkbox" v-model="rememberMe" />
@@ -45,56 +52,58 @@ export default {
       achternaam: '',
       email: '',
       password: '',
-      confirmPassword: '', // Toegevoegd
+      confirmPassword: '',
+      role: '', // ✅ rol toegevoegd
       rememberMe: false,
       message: ''
     };
   },
   methods: {
-  async handleRegister() {
-    if (this.password !== this.confirmPassword) { 
-      this.message = 'Wachtwoorden komen niet overeen.';
-      return;
-    }
-
-    try {
-      const response = await fetch(import.meta.env.VITE_API_URL + '/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          naam: this.naam,
-          tussenvoegsels: this.tussenvoegsels,
-          achternaam: this.achternaam,
-          email: this.email,
-          password: this.password
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.log(data);
-        // Fout van server tonen
-        this.message = data.message || 'Registratie mislukt.';
+    async handleRegister() {
+      if (this.password !== this.confirmPassword) {
+        this.message = 'Wachtwoorden komen niet overeen.';
         return;
       }
 
-      // Succes
-      this.message = 'Registratie gelukt!';
-      this.$router.push('/login');
-      
-    } catch (error) {
-      console.error('Fout bij registratie:', error);
-      this.message = 'Netwerkfout. Probeer het later opnieuw.';
+      console.log('Gekozen rol:', this.role);  // ← Hier loggen we de rol om te checken
+
+      try {
+        const response = await fetch(import.meta.env.VITE_API_URL + '/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            naam: this.naam,
+            tussenvoegsels: this.tussenvoegsels,
+            achternaam: this.achternaam,
+            email: this.email,
+            password: this.password,
+            role: this.role // ✅ rol wordt meegestuurd
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          this.message = data.message || 'Registratie mislukt.';
+          return;
+        }
+
+        this.message = 'Registratie gelukt!';
+        this.$router.push('/login');
+
+      } catch (error) {
+        console.error('Fout bij registratie:', error);
+        this.message = 'Netwerkfout. Probeer het later opnieuw.';
+      }
     }
   }
-}
 };
 </script>
 
 <style scoped>
+/* Jouw CSS code blijft hetzelfde */
 .auth-page {
   background: linear-gradient(to bottom right, #eef2ff, #c3dafe);
   position: absolute;
@@ -106,9 +115,7 @@ export default {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  
 }
-
 
 .auth-container {
   background-color: white;
@@ -116,13 +123,12 @@ export default {
   border-radius: 1.5rem;
   width: 100%;
   max-width: 500px;
-  max-height: 90vh; /* Maximaal 90% van het scherm */
-  overflow-y: auto; /* Scroll als het formulier te hoog is */
+  max-height: 90vh;
+  overflow-y: auto;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
 }
-
 
 .form-title {
   text-align: center;
@@ -138,7 +144,8 @@ label {
   display: block;
 }
 
-input {
+input,
+select {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #ccc;
@@ -148,7 +155,8 @@ input {
   transition: border 0.3s;
 }
 
-input:focus {
+input:focus,
+select:focus {
   border-color: #667eea;
   outline: none;
 }

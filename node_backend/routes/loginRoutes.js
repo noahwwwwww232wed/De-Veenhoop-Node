@@ -1,9 +1,11 @@
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 async function login(req, res) {
+  const { email, password, role } = req.body;
 
-  console.log('Probeer verbinding te maken met de database...');
+  console.log('Login poging:', { email, role });
 
   try {
     const connection = await mysql.createConnection({
@@ -13,27 +15,47 @@ async function login(req, res) {
       database: process.env.DB_NAME,
     });
 
-    console.log('Verbonden met de database!');
+    const [rows] = await connection.execute(
+      'SELECT * FROM users WHERE email = ? AND role = ?',
+      [email, role]
+    );
 
-    //check met select of req.body.email en password in de database zitten
-    const [rows, fields] = await connection.execute('SELECT * FROM users WHERE email = ?', [req.body.email]);
     if (rows.length === 0) {
-      return res.status(401).send('Gebruikersnaam of wachtwoord is onjuist');
+      console.log('Geen gebruiker gevonden');
+      await connection.end();
+      return res.status(401).json({ message: 'Gebruiker niet gevonden of verkeerde rol' });
     }
 
     const user = rows[0];
+
+    console.log('Gebruiker gevonden:', user);
+    console.log('Wachtwoord van frontend:', password);
+    console.log('Gehashed wachtwoord in DB:', user.password);
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+      console.log('Wachtwoord komt niet overeen');
+      await connection.end();
+      return res.status(401).json({ message: 'Wachtwoord is onjuist' });
+    }
+
+    const token = jwt.sign(
+      { userId: user.id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
     await connection.end();
 
-    bcrypt.compare(req.body.password, user.password, function (err, result) {
-      if (err) { throw (err); }
-      else {
-        return res.status(200).send(JSON.stringify('Inloggen is gelukt!'));
-      }
+    return res.status(200).json({
+      message: 'Inloggen is gelukt!',
+      token,
+      role: user.role,
     });
   } catch (error) {
-    var errorMessage = JSON.stringify('Database connectie is mislukt:' + error);
-    console.error(errorMessage)
-    return res.status(500).send(errorMessage);
+    console.error('Fout bij inloggen:', error);
+    return res.status(500).json({ message: 'Serverfout bij inloggen' });
   }
 }
 
