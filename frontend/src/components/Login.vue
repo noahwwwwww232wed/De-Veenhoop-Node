@@ -32,6 +32,7 @@
   </div>
 </template>
 
+
 <script>
 export default {
   name: 'Login',
@@ -61,15 +62,21 @@ export default {
         const result = await response.json();
 
         if (response.ok) {
-          // ✅ Token opslaan
+          // ✅ Opslaan van token, naam en rol in localStorage
           localStorage.setItem('authToken', result.token);
+          localStorage.setItem('userRole', result.role);
+          localStorage.setItem('userName', result.name); // <-- NAAM WORDT NU OOK OPGESLAGEN
 
-          // ✅ Gebruiker redirecten op basis van rol
-          const userRole = result.role;
+          console.log("Login succesvol: ", {
+            token: result.token,
+            role: result.role,
+            name: result.name
+          });
 
-          if (userRole === 'docent') {
+          // ✅ Redirect op basis van rol
+          if (result.role === 'docent') {
             this.$router.push('/docent-dashboard');
-          } else if (userRole === 'leerling') {
+          } else if (result.role === 'leerling') {
             this.$router.push('/leerling-dashboard');
           }
         } else {

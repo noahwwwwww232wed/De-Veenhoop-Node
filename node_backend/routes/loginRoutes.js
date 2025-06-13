@@ -41,7 +41,7 @@ async function login(req, res) {
     }
 
     const token = jwt.sign(
-      { userId: user.id, role: user.role },
+      { userId: user.id, role: user.role, name: user.naam },
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
@@ -52,6 +52,7 @@ async function login(req, res) {
       message: 'Inloggen is gelukt!',
       token,
       role: user.role,
+      name: user.naam,
     });
   } catch (error) {
     console.error('Fout bij inloggen:', error);
