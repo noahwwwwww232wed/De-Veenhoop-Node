@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Navbar :isLoggedIn="isLoggedIn" @logout="handleLogout" />
+  <!--  <Navbar :isLoggedIn="isLoggedIn" @logout="handleLogout" /> -->
     
     <div v-if="userRole === 'docent'">
       <DocentDashboard />

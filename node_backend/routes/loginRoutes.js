@@ -30,9 +30,9 @@ async function login(req, res) {
 
     console.log('Gebruiker gevonden:', user);
     console.log('Wachtwoord van frontend:', password);
-    console.log('Gehashed wachtwoord in DB:', user.password);
+    console.log('Gehashed wachtwoord in DB:', user.wachtwoord);
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
+    const passwordMatch = await bcrypt.compare(password, user.wachtwoord);
 
     if (!passwordMatch) {
       console.log('Wachtwoord komt niet overeen');
