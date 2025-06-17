@@ -1,7 +1,7 @@
 <template>
   <div>
-  <!--  <Navbar :isLoggedIn="isLoggedIn" @logout="handleLogout" /> -->
-    
+    <!-- <Navbar :isLoggedIn="isLoggedIn" @logout="handleLogout" /> -->
+
     <div v-if="userRole === 'docent'">
       <DocentDashboard />
     </div>
@@ -35,7 +35,8 @@ export default {
   created() {
     const token = localStorage.getItem("authToken");
     if (token) {
-      this.userRole = this.parseJwt(token)?.role;
+      // Let op: hier 'rol' ipv 'role' omdat dat in je JWT payload staat
+      this.userRole = this.parseJwt(token)?.rol;
     }
   },
   methods: {

@@ -7,6 +7,7 @@ import About from '../components/About.vue';
 import Cijfers from '../components/Cijfers.vue';
 import DocentDashboard from '../components/DocentDashboard.vue';
 import LeerlingDashboard from '../components/LeerlingDashboard.vue';
+import CijfersLeerling from '@/components/CijfersLeerling.vue';
 
 
 const routes = [
@@ -54,6 +55,11 @@ const routes = [
   path: '/leerling-dashboard',
   name: 'LeerlingDashboard',
   component: LeerlingDashboard,
+},
+{
+  path: '/cijfersleerling',
+  name: 'CijfersLeerling',
+  component: CijfersLeerling,
 },
 ];
 

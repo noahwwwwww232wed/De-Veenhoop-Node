@@ -21,18 +21,18 @@ async function register(req, res) {
       achternaam,
       email,
       password,
-      role
+      rol  // hier 'rol' ipv 'role'
     } = req.body;
 
-    if (!naam || !achternaam || !email || !password || !role) {
+    if (!naam || !achternaam || !email || !password || !rol) {  // check 'rol'
       await connection.end();
       return res.status(400).json({ message: 'Alle verplichte velden moeten ingevuld zijn.' });
     }
 
     // Rol normaliseren naar kleine letters
-    const roleFormatted = role.toLowerCase();
+    const rolFormatted = rol.toLowerCase();
 
-    if (roleFormatted !== 'docent' && roleFormatted !== 'leerling') {
+    if (rolFormatted !== 'docent' && rolFormatted !== 'leerling') {
       await connection.end();
       return res.status(400).json({ message: 'Ongeldige rol opgegeven.' });
     }
@@ -48,12 +48,13 @@ async function register(req, res) {
 
     const volledigeNaam = [naam, tussenvoegsels, achternaam].filter(Boolean).join(' ');
 
+    // Hier in de query ook 'rol' gebruiken
     const [result] = await connection.execute(
-      'INSERT INTO users (naam, email, wachtwoord, role) VALUES (?, ?, ?, ?)',
-      [volledigeNaam, email, hashedPassword, roleFormatted]
+      'INSERT INTO users (naam, email, wachtwoord, rol) VALUES (?, ?, ?, ?)',
+      [volledigeNaam, email, hashedPassword, rolFormatted]
     );
 
-    console.log(`✅ Gebruiker succesvol geregistreerd als "${roleFormatted}":`, result);
+    console.log(`✅ Gebruiker succesvol geregistreerd als "${rolFormatted}":`, result);
 
     await connection.end();
 

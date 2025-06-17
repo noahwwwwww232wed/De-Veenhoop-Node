@@ -6,12 +6,14 @@
       @logout="handleLogout" 
     />
     <div class="dashboard-main">
-      <h1>Welkom, {{ userName || 'docent' }}!</h1>
+      <h1>Cijfers Overzicht</h1>
       <div class="dashboard-cards">
-        <div class="card">
-          <h2>Leerling Overzicht</h2>
-          <p>Bekijk en beheer de cijfers van je leerlingen.</p>
-          <router-link to="/cijfersaanpassen" class="btn">Bekijk Leerlingen</router-link>
+        <div v-if="loading">Cijfers laden...</div>
+        <div v-else-if="error">{{ error }}</div>
+        <div v-else class="card" v-for="cijfer in cijfers" :key="cijfer.id">
+          <h2>{{ cijfer.vak }}</h2>
+          <p>Cijfer: {{ cijfer.cijfer }}</p>
+          <p>Leerling: {{ cijfer.leerlingNaam }}</p>
         </div>
       </div>
     </div>
@@ -20,12 +22,16 @@
 
 <script>
 import Navbar from '@/components/Navbar.vue';
+import axios from 'axios';
 
 export default {
-  name: 'DocentDashboard',
+  name: 'CijfersOverzicht',
   components: { Navbar },
   data() {
     return {
+      cijfers: [],
+      loading: true,
+      error: null,
       isLoggedIn: !!localStorage.getItem('authToken'),
       userRole: null,
       userName: null,
@@ -35,12 +41,26 @@ export default {
     const token = localStorage.getItem('authToken');
     if (token) {
       const payload = this.parseJwt(token);
-      console.log('Decoded JWT payload (docent):', payload);
-      this.userRole = payload?.rol || null; // let op: 'rol' ipv 'role'
+      this.userRole = payload?.role || null;
       this.userName = payload?.name || null;
     }
+    this.fetchCijfers();
   },
   methods: {
+    async fetchCijfers() {
+      try {
+        const token = localStorage.getItem('authToken');
+        const response = await axios.get('http://localhost:3000/api/cijfers', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        this.cijfers = response.data;
+      } catch (err) {
+        this.error = 'Fout bij laden van cijfers.';
+        console.error(err);
+      } finally {
+        this.loading = false;
+      }
+    },
     handleLogout() {
       localStorage.removeItem('authToken');
       this.isLoggedIn = false;
@@ -53,10 +73,7 @@ export default {
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       const jsonPayload = decodeURIComponent(
-        atob(base64)
-          .split('')
-          .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-          .join('')
+        atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')
       );
       return JSON.parse(jsonPayload);
     },
@@ -65,8 +82,9 @@ export default {
 </script>
 
 <style scoped>
+/* Zelfde styling als in je voorbeeld */
 .dashboard-container {
-  background: linear-gradient(135deg, #e8f0fe 0%, #cde0fc 100%);
+  background-color: #e8f0fe, #cde0fc;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -77,13 +95,13 @@ export default {
   padding: 2rem;
   max-width: 960px;
   margin: 0 auto;
+  text-align: center;
 }
 
 h1 {
   color: #333;
   font-weight: 700;
   margin-bottom: 2rem;
-  text-align: center;
 }
 
 .dashboard-cards {
@@ -99,7 +117,6 @@ h1 {
   border-radius: 12px;
   padding: 1.5rem;
   width: 280px;
-  text-align: center;
   transition: box-shadow 0.3s ease;
 }
 
@@ -110,27 +127,10 @@ h1 {
 .card h2 {
   color: #667eea;
   font-weight: 700;
-  margin-bottom: 1rem;
 }
 
 .card p {
   color: #555;
-  margin-bottom: 1.5rem;
-  font-size: 0.95rem;
-}
-
-.btn {
-  display: inline-block;
-  background-color: #667eea;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.75rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-}
-
-.btn:hover {
-  background-color: #5a67d8;
+  margin: 0.5rem 0;
 }
 </style>

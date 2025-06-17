@@ -32,7 +32,6 @@
   </div>
 </template>
 
-
 <script>
 export default {
   name: 'Login',
@@ -55,28 +54,26 @@ export default {
           body: JSON.stringify({
             email: this.email,
             password: this.password,
-            role: this.role,
+            rol: this.role, // << hier aangepast van 'role' naar 'rol'
           }),
         });
 
         const result = await response.json();
 
         if (response.ok) {
-          // ✅ Opslaan van token, naam en rol in localStorage
           localStorage.setItem('authToken', result.token);
-          localStorage.setItem('userRole', result.role);
-          localStorage.setItem('userName', result.name); // <-- NAAM WORDT NU OOK OPGESLAGEN
+          localStorage.setItem('userRole', result.rol);   // ook hier 'rol'
+          localStorage.setItem('userName', result.name);
 
           console.log("Login succesvol: ", {
             token: result.token,
-            role: result.role,
+            role: result.rol,
             name: result.name
           });
 
-          // ✅ Redirect op basis van rol
-          if (result.role === 'docent') {
+          if (result.rol === 'docent') {
             this.$router.push('/docent-dashboard');
-          } else if (result.role === 'leerling') {
+          } else if (result.rol === 'leerling') {
             this.$router.push('/leerling-dashboard');
           }
         } else {
@@ -90,9 +87,6 @@ export default {
   },
 };
 </script>
-
-
-
 
 <style scoped>
 .auth-page {

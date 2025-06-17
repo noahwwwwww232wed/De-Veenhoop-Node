@@ -52,4 +52,5 @@ router.post('/leraar/cijfers', authenticate, authorizeRole('leraar'), async (req
   }
 });
 
+
 module.exports = router;

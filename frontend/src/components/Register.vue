@@ -7,7 +7,7 @@
         <input v-model="naam" type="text" id="naam" placeholder="Voornaam" required />
 
         <label for="tussenvoegsels">Tussenvoegsels</label>
-        <input v-model="tussenvoegsels" type="text" id="tussenvoegsels" placeholder="Tussenvoegsels" />
+        <input v-model="tussenvoegsels" type="text" id="tussenvoegsels" placeholder="Tussenvoegsels (optioneel)" />
 
         <label for="achternaam">Achternaam</label>
         <input v-model="achternaam" type="text" id="achternaam" placeholder="Achternaam" required />
@@ -18,26 +18,16 @@
         <label for="password">Wachtwoord</label>
         <input v-model="password" type="password" id="password" placeholder="Wachtwoord" required />
 
-        <label for="WWbevestigen">Wachtwoord Bevestigen</label>
-        <input v-model="confirmPassword" type="password" id="WWbevestigen" placeholder="Wachtwoord bevestigen" required />
-
-        <label for="role">Registreer als:</label>
-        <select v-model="role" id="role" required>
+        <label for="rol">Registreren als:</label>
+        <select v-model="rol" id="rol" required>
           <option disabled value="">Kies een rol</option>
           <option value="leerling">Leerling</option>
           <option value="docent">Docent</option>
         </select>
 
-        <div class="remember-me">
-          <label class="remember-label">
-            <input type="checkbox" v-model="rememberMe" />
-            <span>Onthoud mij</span>
-          </label>
-        </div>
+        <button type="submit">Registreren</button>
 
-        <button type="submit">Registreer</button>
-        <p>{{ message }}</p>
-        <router-link class="switch-link" to="/login">Al een account? Inloggen</router-link>
+        <router-link class="switch-link" to="/login">Heb je al een account? Inloggen</router-link>
       </form>
     </div>
   </div>
@@ -45,6 +35,7 @@
 
 <script>
 export default {
+  name: 'Register',
   data() {
     return {
       naam: '',
@@ -52,26 +43,21 @@ export default {
       achternaam: '',
       email: '',
       password: '',
-      confirmPassword: '',
-      role: '', // ✅ rol toegevoegd
-      rememberMe: false,
-      message: ''
+      rol: '',
     };
   },
   methods: {
     async handleRegister() {
-      if (this.password !== this.confirmPassword) {
-        this.message = 'Wachtwoorden komen niet overeen.';
+      if (!this.naam || !this.achternaam || !this.email || !this.password || !this.rol) {
+        alert('Vul alle verplichte velden in.');
         return;
       }
-
-      console.log('Gekozen rol:', this.role);  // ← Hier loggen we de rol om te checken
 
       try {
         const response = await fetch(import.meta.env.VITE_API_URL + '/register', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             naam: this.naam,
@@ -79,31 +65,28 @@ export default {
             achternaam: this.achternaam,
             email: this.email,
             password: this.password,
-            role: this.role // ✅ rol wordt meegestuurd
-          })
+            rol: this.rol, // LET OP: 'rol' zoals in backend
+          }),
         });
 
-        const data = await response.json();
+        const result = await response.json();
 
-        if (!response.ok) {
-          this.message = data.message || 'Registratie mislukt.';
-          return;
+        if (response.ok) {
+          alert('Registratie gelukt! Je kunt nu inloggen.');
+          this.$router.push('/login');
+        } else {
+          alert(result.message || 'Registratie mislukt');
         }
-
-        this.message = 'Registratie gelukt!';
-        this.$router.push('/login');
-
-      } catch (error) {
-        console.error('Fout bij registratie:', error);
-        this.message = 'Netwerkfout. Probeer het later opnieuw.';
+      } catch (err) {
+        alert('Fout bij verbinden met server');
+        console.error(err);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
-/* Jouw CSS code blijft hetzelfde */
 .auth-page {
   background: linear-gradient(to bottom right, #eef2ff, #c3dafe);
   position: absolute;
@@ -161,20 +144,6 @@ select:focus {
   outline: none;
 }
 
-.remember-me {
-  display: flex;
-  justify-content: flex-start;
-  margin-bottom: 1rem;
-}
-
-.remember-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.95rem;
-  color: #333;
-}
-
 button {
   width: 100%;
   padding: 0.75rem;
@@ -190,13 +159,6 @@ button {
 
 button:hover {
   background-color: #5a67d8;
-}
-
-p {
-  text-align: center;
-  font-weight: bold;
-  color: #333;
-  margin-top: 1rem;
 }
 
 .switch-link {

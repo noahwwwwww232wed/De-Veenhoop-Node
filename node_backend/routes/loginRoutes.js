@@ -3,9 +3,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 async function login(req, res) {
-  const { email, password, role } = req.body;
+  const { email, password, rol } = req.body;  // let op: 'rol' ipv 'role'
 
-  console.log('Login poging:', { email, role });
+  console.log('Login poging:', { email, rol });
 
   try {
     const connection = await mysql.createConnection({
@@ -15,9 +15,10 @@ async function login(req, res) {
       database: process.env.DB_NAME,
     });
 
+    
     const [rows] = await connection.execute(
-      'SELECT * FROM users WHERE email = ? AND role = ?',
-      [email, role]
+      'SELECT * FROM users WHERE email = ? AND rol = ?',
+      [email, rol]
     );
 
     if (rows.length === 0) {
@@ -40,8 +41,9 @@ async function login(req, res) {
       return res.status(401).json({ message: 'Wachtwoord is onjuist' });
     }
 
+    // JWT payload met 'rol'
     const token = jwt.sign(
-      { userId: user.id, role: user.role, name: user.naam },
+      { userId: user.id, rol: user.rol, name: user.naam },
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
@@ -51,7 +53,7 @@ async function login(req, res) {
     return res.status(200).json({
       message: 'Inloggen is gelukt!',
       token,
-      role: user.role,
+      rol: user.rol,
       name: user.naam,
     });
   } catch (error) {
@@ -60,4 +62,6 @@ async function login(req, res) {
   }
 }
 
-module.exports = { login };
+module.exports = { login };  
+
+

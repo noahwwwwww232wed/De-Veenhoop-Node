@@ -11,10 +11,8 @@
         <div class="card">
           <h2>Mijn Cijfers</h2>
           <p>Bekijk hier al je behaalde resultaten en voortgang.</p>
-          <router-link to="/cijfers" class="btn">Bekijk Cijfers</router-link>
+          <router-link to="/cijfersleerling" class="btn">Bekijk Cijfers</router-link>
         </div>
-        
-        
       </div>
     </div>
   </div>
@@ -38,7 +36,7 @@ export default {
     if (token) {
       const payload = this.parseJwt(token);
       console.log('Decoded JWT payload (leerling):', payload);
-      this.userRole = payload?.role || null;
+      this.userRole = payload?.rol || null; // let op: 'rol'
       this.userName = payload?.name || null;
     }
   },
@@ -68,7 +66,7 @@ export default {
 
 <style scoped>
 .dashboard-container {
-  background-color: #e8f0fe, #cde0fc;
+  background: linear-gradient(135deg, #e8f0fe 0%, #cde0fc 100%);
   min-height: 100vh;
   display: flex;
   flex-direction: column;

@@ -8,7 +8,7 @@ async function connectToDatabase() {
       password: '',
       database: 'deveenhoop'
     });
-
+  
     // Execute a simple query
     const [rows, fields] = await connection.execute('SELECT * FROM users');
     console.log('Query results:', rows);
