@@ -7,11 +7,11 @@
       </div>
       <div class="navbar-center">
         <a href="/">Home</a>
+        <a href="/cijfers">Cijfers</a>
         <a href="/about">About</a>
       </div>
       <div class="navbar-right"></div> <!-- lege div om ruimte rechts te houden -->
-    </nav>
-
+    </nav> 
     <!-- Content -->
     <div class="home-container">
       <h2 class="home-title">De Veenhoop</h2>

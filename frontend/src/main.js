@@ -8,4 +8,4 @@ import router from './router';  // Router importeren
 const app = createApp(App);
 app.use(router);  // Router gebruiken
 app.mount('#app');  // Mounten van de app
-createApp(App).use(router).mount('#app')
+//createApp(App).use(router).mount('#app')

@@ -1,18 +1,12 @@
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const connection = require('../db/connection');
 
 async function register(req, res) {
   console.log('Probeer verbinding te maken met de database...');
 
   try {
-    const connection = await mysql.createConnection({
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-    });
-    console.log('Verbonden met de database!');
 
     const userPassword = req.body.password;
 
@@ -21,7 +15,7 @@ async function register(req, res) {
 
     //Gebruikt het gehashte wachtwoord in de query
     const [rows] = await connection.execute(
-      'INSERT INTO users (id, name, email, password) VALUES (?, ?, ?, ?)',
+      'INSERT INTO users (id, naam, email, wachtwoord) VALUES (?, ?, ?, ?)',
       [0, req.body.naam, req.body.email, hashedPassword]
     );
 
