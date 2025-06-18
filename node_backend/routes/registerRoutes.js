@@ -1,33 +1,62 @@
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const connection = require('../db/connection');
+const connectDB = require('../db/connection');
 
 async function register(req, res) {
-  console.log('Probeer verbinding te maken met de database...');
+  console.log('📡 Registratiepoging ontvangen...');
 
   try {
+    const connection = await connectDB();
 
-    const userPassword = req.body.password;
+    const {
+      naam,
+      tussenvoegsels = '',
+      achternaam,
+      email,
+      password,
+      rol  // hier 'rol' ipv 'role'
+    } = req.body;
 
-    //Hasht het wachtwoord correct
-    const hashedPassword = await bcrypt.hash(userPassword, saltRounds);
+    if (!naam || !achternaam || !email || !password || !rol) {  // check 'rol'
+      // await connection.end();
+      return res.status(400).json({ message: 'Alle verplichte velden moeten ingevuld zijn.' });
+    }
 
-    //Gebruikt het gehashte wachtwoord in de query
-    const [rows] = await connection.execute(
-      'INSERT INTO users (id, naam, email, wachtwoord) VALUES (?, ?, ?, ?)',
-      [0, req.body.naam, req.body.email, hashedPassword]
+    // Rol normaliseren naar kleine letters
+    const rolFormatted = rol.toLowerCase();
+
+    if (rolFormatted !== 'docent' && rolFormatted !== 'leerling') {
+      // await connection.end();
+      return res.status(400).json({ message: 'Ongeldige rol opgegeven.' });
+    }
+
+    const [existingUser] = await connection.execute('SELECT * FROM users WHERE email = ?', [email]);
+
+    if (existingUser.length > 0) {
+      // await connection.end();
+      return res.status(400).json({ message: 'E-mailadres is al in gebruik.' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    const volledigeNaam = [naam, tussenvoegsels, achternaam].filter(Boolean).join(' ');
+
+    // Hier in de query ook 'rol' gebruiken
+    const [result] = await connection.execute(
+      'INSERT INTO users (naam, email, wachtwoord, rol) VALUES (?, ?, ?, ?)',
+      [volledigeNaam, email, hashedPassword, rolFormatted]
     );
 
-    console.log('Data is opgeslagen in de database:', rows);
+    console.log(`✅ Gebruiker succesvol geregistreerd als "${rolFormatted}":`, result);
 
-    await connection.end();
+    // await connection.end();
 
-    return res.send(JSON.stringify("Data is opgeslagen in de database: " + rows));
+    return res.status(201).json({ message: 'Registratie gelukt!' });
+
   } catch (error) {
-    const errorMessage = JSON.stringify('Database connectie is mislukt: ' + error);
-    console.error(errorMessage);
-    return res.status(500).send(errorMessage);
+    console.error('❌ Fout bij registratie:', error);
+    return res.status(500).json({ message: 'Er is een interne fout opgetreden.' });
   }
 }
 

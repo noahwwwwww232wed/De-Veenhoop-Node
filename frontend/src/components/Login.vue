@@ -9,6 +9,13 @@
         <label for="password">Wachtwoord</label>
         <input v-model="password" type="password" id="password" placeholder="Wachtwoord" required />
 
+        <label for="role">Login als:</label>
+        <select v-model="role" id="role" required>
+          <option disabled value="">Kies een rol</option>
+          <option value="leerling">Leerling</option>
+          <option value="docent">Docent</option>
+        </select>
+
         <div class="remember-me">
           <label class="remember-label">
             <input type="checkbox" id="remember" v-model="rememberMe" />
@@ -32,6 +39,7 @@ export default {
     return {
       email: '',
       password: '',
+      role: '',
       rememberMe: false
     };
   },
@@ -46,17 +54,28 @@ export default {
           body: JSON.stringify({
             email: this.email,
             password: this.password,
+            rol: this.role, // << hier aangepast van 'role' naar 'rol'
           }),
         });
 
         const result = await response.json();
 
         if (response.ok) {
-          // ✅ Token opslaan
           localStorage.setItem('authToken', result.token);
+          localStorage.setItem('userRole', result.rol);   // ook hier 'rol'
+          localStorage.setItem('userName', result.name);
 
-          // ⏩ Ga naar dashboard
-          this.$router.push('/dashboard');
+          console.log("Login succesvol: ", {
+            token: result.token,
+            role: result.rol,
+            name: result.name
+          });
+
+          if (result.rol === 'docent') {
+            this.$router.push('/docent-dashboard');
+          } else if (result.rol === 'leerling') {
+            this.$router.push('/leerling-dashboard');
+          }
         } else {
           alert(result.message || 'Login mislukt');
         }
@@ -110,7 +129,8 @@ label {
   display: block;
 }
 
-input {
+input,
+select {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid #ccc;
@@ -120,7 +140,8 @@ input {
   transition: border 0.3s;
 }
 
-input:focus {
+input:focus,
+select:focus {
   border-color: #667eea;
   outline: none;
 }

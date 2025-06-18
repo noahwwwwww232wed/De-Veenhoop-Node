@@ -1,36 +1,63 @@
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
-const connection = require('../db/connection');
+const connectDB = require('../db/connection');
+const jwt = require('jsonwebtoken');
 
 async function login(req, res) {
+  const { email, password, rol } = req.body;  // let op: 'rol' ipv 'role'
 
-  console.log('Probeer verbinding te maken met de database...');
+  console.log('Login poging:', { email, rol });
 
   try {
+    const connection = await connectDB();
     
     //check met select of req.body.email en password in de database zitten
     const [rows] = await connection.execute('SELECT * FROM users WHERE email = ?', [req.body.email]);
    console.log(rows);
    
     if (rows.length === 0) {
-      return res.status(401).send('Gebruikersnaam of wachtwoord is onjuist');
+      console.log('Geen gebruiker gevonden');
+      await connection.end();
+      return res.status(401).json({ message: 'Gebruiker niet gevonden of verkeerde rol' });
     }
 
     const user = rows[0];
-    
-    bcrypt.compare(req.body.password, user.password, function (err, result) {
-      if (err) { throw (err); }
-      else {
-        return res.status(200).send(JSON.stringify('Inloggen is gelukt!'));
-      }
+
+    console.log('Gebruiker gevonden:', user);
+    console.log('Wachtwoord van frontend:', password);
+    console.log('Gehashed wachtwoord in DB:', user.wachtwoord);
+
+    const passwordMatch = await bcrypt.compare(password, user.wachtwoord);
+
+    if (!passwordMatch) {
+      console.log('Wachtwoord komt niet overeen');
+      await connection.end();
+      return res.status(401).json({ message: 'Wachtwoord is onjuist' });
+    }
+
+    // JWT payload met 'rol'
+    const token = jwt.sign(
+      { userId: user.id, rol: user.rol, name: user.naam },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    await connection.end();
+
+    return res.status(200).json({
+      message: 'Inloggen is gelukt!',
+      token,
+      rol: user.rol,
+      name: user.naam,
     });
     await connection.end();
 
   } catch (error) {
-    var errorMessage = JSON.stringify('Database connectie is mislukt:' + error);
-    console.error(errorMessage)
-    return res.status(500).send(errorMessage);
+    console.error('Fout bij inloggen:', error);
+    return res.status(500).json({ message: 'Serverfout bij inloggen' });
   }
 }
 
-module.exports = { login };
+module.exports = { login };  
+
+

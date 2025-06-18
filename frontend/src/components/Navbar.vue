@@ -7,25 +7,49 @@
         class="logo"
       />
     </div>
- 
+
     <div class="navbar-center">
-      <router-link to="/" class="nav-link">Home</router-link>
-      <router-link to="/cijfers" class="nav-link">Cijfers</router-link>
+      <router-link :to="homeRoute" class="nav-link">Home</router-link>
+      <router-link v-if="isLoggedIn" to="/cijfers" class="nav-link">Cijfers</router-link>
       <router-link to="/about" class="nav-link">About</router-link>
     </div>
- 
+
     <div class="navbar-right">
-      <button @click="$emit('logout')" class="logout-button">Logout</button>
+      <button
+        v-if="isLoggedIn"
+        @click="$emit('logout')"
+        class="logout-button"
+      >
+        Logout
+      </button>
     </div>
   </nav>
 </template>
- 
+
 <script>
 export default {
   name: "Navbar",
+  props: {
+    isLoggedIn: {
+      type: Boolean,
+      default: false,
+    },
+    userRole: {
+      type: String,
+      default: null,
+    },
+  },
+  computed: {
+    homeRoute() {
+      if (this.userRole === 'docent') return '/docent-dashboard';
+      if (this.userRole === 'leerling') return '/leerling-dashboard';
+      return '/';
+    },
+  },
 };
 </script>
- 
+
+
 <style scoped>
 .navbar {
   display: flex;
@@ -39,25 +63,25 @@ export default {
   top: 0;
   z-index: 10;
 }
- 
+
 .navbar-left,
 .navbar-right {
   width: 150px;
   display: flex;
   align-items: center;
 }
- 
+
 .navbar-left .logo {
   height: 40px;
 }
- 
+
 .navbar-center {
   flex: 1;
   display: flex;
   justify-content: center;
   gap: 2rem;
 }
- 
+
 .navbar-center .nav-link {
   color: #667eea;
   font-weight: 600;
@@ -65,17 +89,11 @@ export default {
   font-size: 1rem;
   transition: color 0.3s;
 }
- 
+
 .navbar-center .nav-link:hover {
   color: #5a67d8;
   text-decoration: underline;
 }
- 
-.navbar-right {
-  display: flex;
-  align-items: center;
-}
- 
 .logout-button {
   background-color: #667eea;
   color: white;
@@ -86,7 +104,7 @@ export default {
   font-weight: 600;
   transition: background-color 0.3s;
 }
- 
+
 .logout-button:hover {
   background-color: #5a67d8;
 }

@@ -1,10 +1,11 @@
 const mysql = require('mysql2/promise');
-const connection = require('../db/connection');
+const connectDB = require('../db/connection');
 
 async function cijfers(req, res) {
   console.log('Probeer verbinding te maken met de database...');
 
   try {
+    const connection = await connectDB();
   
 
     const [rows] = await connection.execute(
