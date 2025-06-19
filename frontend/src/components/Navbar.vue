@@ -7,10 +7,10 @@
         class="logo"
       />
     </div>
-
+  <!-- v-if="isLoggedIn" deze hoort bij /cijfers hieronder -->
     <div class="navbar-center">
       <router-link :to="homeRoute" class="nav-link">Home</router-link>
-      <router-link v-if="isLoggedIn" to="/cijfers" class="nav-link">Cijfers</router-link>
+      <router-link to="/cijfers" class="nav-link">Cijfers</router-link> 
       <router-link to="/about" class="nav-link">About</router-link>
     </div>
 

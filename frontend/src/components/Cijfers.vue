@@ -167,7 +167,7 @@ export default {
 
 
 
-import Navbar from './Navbar.vue';
+import Navbar from '@/components/Navbar.vue';
 import axios from 'axios';
 
 export default {
