@@ -15,8 +15,8 @@
         </ul>
       </div>
 
-      <!-- Leraar formulier -->
-      <div v-else-if="role === 'leraar'">
+      
+      <div v-else-if="role === 'docent'">
         <form @submit.prevent="voegCijferToe" class="space-y-4">
           <div>
             <label>Leerling ID:</label>
