@@ -17,7 +17,7 @@
     <div class="navbar-right">
       <button
         v-if="isLoggedIn"
-        @click="$emit('logout')"
+        @click="handleLogout"
         class="logout-button"
       >
         Logout
@@ -46,8 +46,19 @@ export default {
       return '/';
     },
   },
+  methods: {
+ handleLogout() {
+  console.log('User logged out');
+  localStorage.removeItem('authToken');
+  localStorage.removeItem('userRole');
+  localStorage.removeItem('userName');
+  this.$router.push('/login');
+}
+
+  }
 };
 </script>
+
 
 
 <style scoped>

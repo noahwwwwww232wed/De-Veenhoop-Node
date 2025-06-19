@@ -2,6 +2,10 @@
   <div class="auth-page">
     <div class="auth-container">
       <h2 class="form-title">Login</h2>
+      <router-link to="/" class="back-link">
+  &#8592; Terug naar Home
+</router-link>
+
       <form @submit.prevent="handleLogin">
         <label for="email">E-mail</label>
         <input v-model="email" type="email" id="email" placeholder="E-mail" required />
@@ -190,4 +194,17 @@ button:hover {
 .switch-link:hover {
   text-decoration: underline;
 }
+.back-link {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #667eea;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
 </style>
