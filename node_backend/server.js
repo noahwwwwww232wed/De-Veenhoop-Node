@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 // server.js
 const express = require('express');
 require('dotenv').config();
@@ -32,7 +30,6 @@ app.post('/login', login);
 app.post('/cijfers', cijfers);
 
 
-// ✅ /api/namen
 app.get('/api/namen', async (req, res) => {
   try {
     const connection = await connectDB();
@@ -45,7 +42,18 @@ app.get('/api/namen', async (req, res) => {
   }
 });
 
-// ✅ /api/cijfers
+ app.get('/vakken', async (req, res) => {
+  try {
+    const connection = await connectDB();
+    const [rows] = await connection.execute('SELECT vak_id, naam FROM vakken');
+    res.json(rows);
+  } catch (err) {
+    console.error('Fout bij ophalen vakken:', err);
+    res.status(500).json({ error: 'Databasefout' });
+  }
+});
+
+
 app.post('/api/cijfers', async (req, res) => {
   try {
     const connection = await connectDB();
@@ -64,7 +72,7 @@ app.post('/api/cijfers', async (req, res) => {
   }
 });
 
-// ✅ /klassen
+
 app.get('/klassen', async (req, res) => {
   try {
     const connection = await connectDB();
@@ -77,7 +85,7 @@ app.get('/klassen', async (req, res) => {
   }
 });
 
-// ✅ /klassen/:id
+
 app.get('/klassen/:id', async (req, res) => {
   try {
     const connection = await connectDB();
@@ -96,7 +104,7 @@ app.get('/klassen/:id', async (req, res) => {
   }
 });
 
-// ✅ /klassen/:id/leerlingen
+
 app.get('/klassen/:id/leerlingen', async (req, res) => {
   try {
     const connection = await connectDB();
@@ -116,14 +124,33 @@ app.get('/klassen/:id/leerlingen', async (req, res) => {
   }
 });
 
+app.get('/api/cijfers/:vak', async (req, res) => {
+  const vak = req.params.vak;
+  try {
+    const connection = await connectDB();
+    const [rows] = await connection.execute(
+      `SELECT c.cijfer, u.naam AS leerling_naam 
+       FROM cijfers c 
+       JOIN users u ON c.leerling_id = u.id 
+       JOIN vakken v ON c.vak_id = v.vak_id 
+       WHERE v.naam = ?`, [vak]
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error('Database fout:', err);
+    res.status(500).json({ error: 'Databasefout' });
+  }
+});
 
 
-// 404 fallback
+
+
+
 app.use((req, res) => {
   res.status(404).json({ message: 'Route niet gevonden' });
 });
 
-// Start server
+
 app.listen(port, () => {
-  console.log(`✅ Server draait op http://localhost:${port}`);
+  console.log(` Server draait op http://localhost:${port}`);
 });

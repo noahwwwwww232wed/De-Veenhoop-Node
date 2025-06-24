@@ -1,13 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../components/Home.vue';
 import Login from '../components/Login.vue';
-import Register from '../components/Register.vue'; 
+import Register from '../components/Register.vue';
 import Dashboard from '../components/Dashboard.vue'; // <-- nieuw toegevoegd
 import About from '../components/About.vue';
 import Cijfers from '../components/Cijfers.vue';
 import DocentDashboard from '../components/DocentDashboard.vue';
 import LeerlingDashboard from '../components/LeerlingDashboard.vue';
 import CijfersLeerling from '@/components/CijfersLeerling.vue';
+import CijfersInvoeren from '@/components/CijfersInvoeren.vue';
+import Nederlands from '@/components/Nederlands.vue';
+import Wiskunde from '@/components/Wiskunde.vue';
+import Engels from '@/components/Engels.vue';
 
 
 const routes = [
@@ -47,20 +51,41 @@ const routes = [
     component: Cijfers, // <-- nieuw toegevoegd
   },
   {
-  path: '/docent-dashboard',
-  name: 'DocentDashboard',
-  component: DocentDashboard,
-},
-{
-  path: '/leerling-dashboard',
-  name: 'LeerlingDashboard',
-  component: LeerlingDashboard,
-},
-{
-  path: '/cijfersleerling',
-  name: 'CijfersLeerling',
-  component: CijfersLeerling,
-},
+    path: '/docent-dashboard',
+    name: 'DocentDashboard',
+    component: DocentDashboard,
+  },
+  {
+    path: '/leerling-dashboard',
+    name: 'LeerlingDashboard',
+    component: LeerlingDashboard,
+  },
+  {
+    path: '/cijfers-leerling',
+    name: 'CijfersLeerling',
+    component: CijfersLeerling,
+  },
+  {
+    path: '/nederlands',
+    name: 'Nederlands',
+    component: () => import('../components/Nederlands.vue'),
+  },
+  {
+    path: '/wiskunde',
+    name: 'Wiskunde',
+    component: () => import('../components/Wiskunde.vue'),
+  },
+  {
+    path: '/engels',
+    name: 'Engels',
+    component: () => import('../components/Engels.vue'),
+  },
+  {
+    path: '/cijfers-invoeren/:leerlingId',
+    name: 'CijfersInvoeren',
+    component: CijfersInvoeren,
+    props: true,
+  },
 ];
 
 const router = createRouter({
