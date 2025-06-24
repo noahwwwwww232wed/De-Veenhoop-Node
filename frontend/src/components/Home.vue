@@ -11,9 +11,9 @@
       </div>
     </nav>
 
-    <!-- Content blokken -->
+    
     <div class="home-content-row">
-      <!-- Login/Register blok -->
+     
       <div class="home-container">
         <h2 class="home-title">De Veenhoop</h2>
         <p class="home-text">
@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <!-- Informatief blok met afbeelding -->
+      
       <div class="home-container info-block">
         
         <div>
@@ -69,7 +69,7 @@ export default {
   min-height: 100vh;
 }
 
-/* Navbar */
+
 .navbar {
   width: 100%;
   height: 70px;
@@ -113,7 +113,7 @@ export default {
   height: 40px;
 }
 
-/* Content row */
+
 .home-content-row {
   display: flex;
   gap: 2rem;
@@ -122,7 +122,7 @@ export default {
   justify-content: center;
 }
 
-/* Content blocks */
+
 .home-container {
   background-color: white;
   padding: 2rem;
@@ -166,7 +166,7 @@ export default {
   color: #999;
 }
 
-/* Info block met afbeelding */
+
 .info-block {
   display: flex;
   flex-direction: column;

@@ -1,22 +1,19 @@
 const mysql = require('mysql2/promise');
-async function connectToDatabase() {
-  console.log('Probeer verbinding te maken met de database...');
-  try {
-    const connection = await mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: '',
-      database: 'deveenhoop'
+ 
+let connection
+ 
+async function connectDB() {
+  if (!connection) {
+    connection = await mysql.createConnection({
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME
     });
-  
-    // Execute a simple query
-    const [rows, fields] = await connection.execute('SELECT * FROM users');
-    console.log('Query results:', rows);
-
-    await connection.end();
-  } catch (error) {
-    console.error('Database connectie is mislukt:', error);
+    console.log('MySQL connected');
   }
+  return connection;
 }
-
-module.exports = {connectToDatabase};
+ 
+module.exports = connectDB;
+ 

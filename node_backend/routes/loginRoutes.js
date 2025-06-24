@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 async function login(req, res) {
-  const { email, password, rol } = req.body;  // let op: 'rol' ipv 'role'
+  const { email, password, rol } = req.body;  
 
   console.log('Login poging:', { email, rol });
 
@@ -41,7 +41,7 @@ async function login(req, res) {
       return res.status(401).json({ message: 'Wachtwoord is onjuist' });
     }
 
-    // JWT payload met 'rol'
+    
     const token = jwt.sign(
       { userId: user.id, rol: user.rol, name: user.naam },
       process.env.JWT_SECRET,

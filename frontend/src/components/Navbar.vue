@@ -10,7 +10,7 @@
 
     <div class="navbar-center">
       <router-link :to="homeRoute" class="nav-link">Home</router-link>
-      <router-link v-if="isLoggedIn" to="/cijfers" class="nav-link">Cijfers</router-link>
+      <router-link v-if="isLoggedIn" :to="cijfersRoute" class="nav-link">Cijfers</router-link>
       <router-link to="/about" class="nav-link">About</router-link>
     </div>
 
@@ -45,22 +45,21 @@ export default {
       if (this.userRole === 'leerling') return '/leerling-dashboard';
       return '/';
     },
+    cijfersRoute() {
+      return this.userRole === 'leerling' ? '/cijfers-leerling' : '/cijfers';
+    }
   },
   methods: {
- handleLogout() {
-  console.log('User logged out');
-  localStorage.removeItem('authToken');
-  localStorage.removeItem('userRole');
-  localStorage.removeItem('userName');
-  this.$router.push('/login');
-}
-
+    handleLogout() {
+      console.log('User logged out');
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('userName');
+      this.$router.push('/login');
+    }
   }
 };
 </script>
-
-
-
 <style scoped>
 .navbar {
   display: flex;

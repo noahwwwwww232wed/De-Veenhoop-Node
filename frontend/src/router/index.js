@@ -8,6 +8,11 @@ import Cijfers from '../components/Cijfers.vue';
 import DocentDashboard from '../components/DocentDashboard.vue';
 import LeerlingDashboard from '../components/LeerlingDashboard.vue';
 import CijfersLeerling from '@/components/CijfersLeerling.vue';
+import CijfersInvoeren from '@/components/CijfersInvoeren.vue'; 
+import Nederlands from '@/components/Nederlands.vue';
+import Wiskunde from '@/components/Wiskunde.vue';
+import Engels from '@/components/Engels.vue';
+
 
 
 const routes = [
@@ -34,17 +39,17 @@ const routes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: Dashboard, // <-- nieuw toegevoegd
+    component: Dashboard, 
   },
   {
     path: '/about',
     name: 'About',
-    component: About, // <-- nieuw toegevoegd
+    component: About, 
   },
   {
     path: '/cijfers',
     name: 'Cijfers',
-    component: Cijfers, // <-- nieuw toegevoegd
+    component: Cijfers, 
   },
   {
   path: '/docent-dashboard',
@@ -57,10 +62,32 @@ const routes = [
   component: LeerlingDashboard,
 },
 {
-  path: '/cijfersleerling',
+    path: '/cijfers-invoeren/:leerlingId',
+    name: 'CijfersInvoeren',
+    component: CijfersInvoeren,
+    props: true, 
+  },
+  {
+  path: '/cijfers-leerling',
   name: 'CijfersLeerling',
   component: CijfersLeerling,
 },
+ {
+    path: '/nederlands',
+    name: 'Nederlands',
+    component: () => import('../components/Nederlands.vue'),
+  },
+  {
+    path: '/wiskunde',
+    name: 'Wiskunde',
+    component: () => import('../components/Wiskunde.vue'),
+  },
+  {
+    path: '/engels',
+    name: 'Engels',
+    component: () => import('../components/Engels.vue'),
+  },
+
 ];
 
 const router = createRouter({

@@ -3,8 +3,8 @@
     <div class="auth-container">
       <h2 class="form-title">Login</h2>
       <router-link to="/" class="back-link">
-  &#8592; Terug naar Home
-</router-link>
+        &#8592; Terug naar Home
+      </router-link>
 
       <form @submit.prevent="handleLogin">
         <label for="email">E-mail</label>
@@ -66,13 +66,15 @@ export default {
 
         if (response.ok) {
           localStorage.setItem('authToken', result.token);
-          localStorage.setItem('userRole', result.rol);   // ook hier 'rol'
+          localStorage.setItem('userRole', result.rol);   
           localStorage.setItem('userName', result.name);
+          localStorage.setItem('userId', result.id); 
 
           console.log("Login succesvol: ", {
             token: result.token,
             role: result.rol,
-            name: result.name
+            name: result.name,
+            id: result.id 
           });
 
           if (result.rol === 'docent') {
@@ -194,6 +196,7 @@ button:hover {
 .switch-link:hover {
   text-decoration: underline;
 }
+
 .back-link {
   display: inline-block;
   margin-bottom: 1rem;
@@ -206,5 +209,4 @@ button:hover {
 .back-link:hover {
   text-decoration: underline;
 }
-
 </style>

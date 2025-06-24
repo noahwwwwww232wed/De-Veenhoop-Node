@@ -11,7 +11,7 @@
         <div class="card">
           <h2>Leerling Overzicht</h2>
           <p>Bekijk en beheer de cijfers van je leerlingen.</p>
-          <router-link to="/cijfersaanpassen" class="btn">Bekijk Leerlingen</router-link>
+          <router-link to="/cijfers" class="btn">Bekijk Leerlingen</router-link>
         </div>
       </div>
     </div>
@@ -36,7 +36,7 @@ export default {
     if (token) {
       const payload = this.parseJwt(token);
       console.log('Decoded JWT payload (docent):', payload);
-      this.userRole = payload?.rol || null; // let op: 'rol' ipv 'role'
+      this.userRole = payload?.rol || null; 
       this.userName = payload?.name || null;
     }
   },

@@ -9,9 +9,9 @@
       <h1>Welkom, {{ userName || 'leerling' }}!</h1>
       <div class="dashboard-cards">
         <div class="card">
-          <h2>Mijn Cijfers</h2>
+          <h2>Recente Cijfers</h2>
           <p>Bekijk hier al je behaalde resultaten en voortgang.</p>
-          <router-link to="/cijfersleerling" class="btn">Bekijk Cijfers</router-link>
+          <router-link to="/cijfers-leerling" class="btn">Bekijk Cijfers</router-link>
         </div>
       </div>
     </div>
