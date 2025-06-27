@@ -1,10 +1,10 @@
 <template>
-   <Navbar :isLoggedIn="isLoggedIn" @logout="handleLogout" />
+  <Navbar :isLoggedIn="isLoggedIn" @logout="handleLogout" />
   <div class="page-wrapper">
     <div class="tile-container">
-      <a href="/nederlands" class="tile">Nederlands</a>
-      <a href="/wiskunde" class="tile">Wiskunde</a>
-      <a href="/engels" class="tile">Engels</a>
+      <router-link to="/nederlands" class="tile">Nederlands</router-link>
+      <router-link to="/wiskunde" class="tile">Wiskunde</router-link>
+      <router-link to="/engels" class="tile">Engels</router-link>
     </div>
   </div>
 </template>

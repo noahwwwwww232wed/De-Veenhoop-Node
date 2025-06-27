@@ -19,7 +19,7 @@
             <div class="leerling-info">
               <span class="leerling-naam">{{ leerling.naam }}</span>
               <button @click="gaNaarCijferPagina(leerling.id)" class="cijfer-knop">
-                Cijfer invoeren of aanpassen
+                Cijfer invoeren
               </button>
             </div>
           </li>
